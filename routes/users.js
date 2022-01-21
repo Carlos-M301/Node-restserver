@@ -4,7 +4,9 @@ const { check } = require('express-validator');
 
 const { getUsers, putUsers, patchUsers, postUsers, deleteUsers } = require('../controllers/userController');
 const { isValidRole, isAValidEmail, userExist } = require('../helpers/db-validators');
-const { validateData } = require('../middlewares/validate-fields');
+
+const { validateData, validateJWT, isAdminRole, haveRole } = require('../middlewares');
+
 
 const router = Router();
 //First param is the 'url', second is any 'middleware', third is the 'controller' 
@@ -28,6 +30,11 @@ router.post( '/',[
 ] ,postUsers );
 
 router.delete( '/:id', [
+    validateJWT,
+    //To validate with one role
+    isAdminRole,
+    //Can do this action if it have one of this roles.
+    //haveRole('ADMIN_ROLE', 'SALES_ROLE'),
     check( 'id', 'Is not a valid id' ).isMongoId(),
     check( 'id' ).custom( userExist ),
     validateData,

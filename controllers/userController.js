@@ -59,6 +59,8 @@ const putUsers = async(req, res = response) =>{
 const deleteUsers = async(req, res = response) =>{
 
     const id = req.params.id;
+    //Whit this I can get the user who is making this request.
+    const authUser = req.user;
     const status = { status: false };
     // Physically delete
     //await UserModel.findByIdAndDelete( id );
